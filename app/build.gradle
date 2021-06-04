@@ -73,4 +73,7 @@ dependencies {
 
     // gson
     implementation 'com.google.code.gson:gson:2.8.6'
+
+    // romandanylyk Indicator
+    implementation 'com.romandanylyk:pageindicatorview:1.0.3'
 }
