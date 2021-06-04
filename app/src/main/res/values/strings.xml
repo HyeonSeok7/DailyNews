@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">DailyNews</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    
+    
+    <!-- toast message -->
+    <string name="toast_exit_app">앱을 종료하시겠습니까?</string>
+
+
+    <!-- Button -->
+    <string name="button_positive">확인</string>
+    <string name="button_negative">취소</string>
+    
+
+</resources>
