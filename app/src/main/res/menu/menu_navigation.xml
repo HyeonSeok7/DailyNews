@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/item_home"
+        android:icon="@drawable/ic_home"
+        android:enabled="true"
+        android:contentDescription="@string/bottom_navigation_home"
+        android:title="@string/bottom_navigation_home" />
+
+    <item
+        android:id="@+id/item_search"
+        android:icon="@drawable/ic_search"
+        android:enabled="true"
+        android:contentDescription="@string/bottom_navigation_search"
+        android:title="@string/bottom_navigation_search"/>
+
+    <item
+        android:id="@+id/item_bookmark"
+        android:icon="@drawable/ic_save"
+        android:enabled="true"
+        android:contentDescription="@string/bottom_navigation_save"
+        android:title="@string/bottom_navigation_save"/>
+
+    <item
+        android:id="@+id/item_setting"
+        android:icon="@drawable/ic_settings"
+        android:enabled="true"
+        android:contentDescription="@string/bottom_navigation_setting"
+        android:title="@string/bottom_navigation_setting" />
+</menu>

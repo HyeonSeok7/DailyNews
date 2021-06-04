@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         alert (message = getString(R.string.toast_exit_app)){
-            yesButton {  }
+            yesButton { finish() }
             noButton { it.dismiss() }
         }.show()
     }
