@@ -3,7 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    
+
     <!-- toast message context -->
     <string name="toast_exit_app">앱을 종료하시겠습니까?</string>
 
@@ -19,5 +19,10 @@
 
     <!-- value -->
     <string name="value_dimension_ratio">16:10</string>
+
+    <!-- description -->
+    <string name="description_news_image">뉴스 이미지</string>
+    <string name="description_new_image">New 이미지</string>
+    <string name="description_save_image">save 이미지</string>
 
 </resources>
