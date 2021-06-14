@@ -4,6 +4,7 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.prof.rssparser.Article
 
 
 @BindingAdapter("bindLoadingGif")
@@ -14,5 +15,12 @@ fun bindViewLoadingGif(view: ImageView, data: String) {
         .asGif()
         .load(R.mipmap.loading_gif)
         .diskCacheStrategy(DiskCacheStrategy.RESOURCE) // Glide에서 캐싱한 리소스와 로드할 리소스가 같을 때 캐싱된 리소스 사용
+        .into(view)
+}
+
+@BindingAdapter("bindTitleImg")
+fun bindViewTitleImg(view: ImageView, data: Article) {
+    Glide.with(view.context)
+        .load(data.image)
         .into(view)
 }

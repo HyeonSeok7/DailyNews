@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+
+    <data>
+        <import type="android.view.View"/>
+    </data>
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,6 +47,7 @@
             android:maxLines="2"
             android:textColor="@color/black"
             android:textSize="15sp"
+            android:text="@{}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iv_new"
             app:layout_constraintStart_toEndOf="@+id/cv_thumbnails"
