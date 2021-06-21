@@ -5,8 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.dailynews.utils.Constants
 import com.prof.rssparser.Channel
 import com.prof.rssparser.Parser
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
@@ -15,12 +17,7 @@ import java.lang.Exception
 
 class HomeViewModel: ViewModel() {
 
-    private val url = "https://www.androidauthority.com/feed"
     private lateinit var articleListLive: MutableLiveData<Channel>
-
-    private val _snackbar = MutableLiveData<String>()
-    val snackbar: LiveData<String>
-        get() = _snackbar
 
     private val _rssChannel = MutableLiveData<Channel>()
     val rssChannel: LiveData<Channel>
@@ -30,24 +27,21 @@ class HomeViewModel: ViewModel() {
         OkHttpClient()
     }
 
-    fun onSnackbarShowed() {
-        _snackbar.value = ""
-    }
-
     fun fetchFeed(parser: Parser) {
+        Log.e(TAG, "fetchFeed:$parser")
         viewModelScope.launch {
             try {
-                val channel = parser.getChannel(url)
+                val channel = parser.getChannel(Constants.GoogleRSS.BASE_URL)
                 _rssChannel.postValue(channel)
             } catch (e: Exception) {
                 e.printStackTrace()
-                _snackbar.value = "An error has occurred. Please retry"
                 _rssChannel.postValue(Channel(null, null, null, null, null, null, mutableListOf()))
             }
         }
     }
 
     fun fetchForUrlAndParseRawData(url: String) {
+        Log.d(TAG,"fetchForUrlAndParseRawData, url:$url")
         val parser = Parser.Builder().build()
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -55,10 +49,11 @@ class HomeViewModel: ViewModel() {
                 .url(url)
                 .build()
             val result = okHttpClient.newCall(request).execute()
-            val raw = runCatching { result.body.toString() }.getOrNull()
+            val raw = runCatching { result.body?.string() }.getOrNull()
             if (raw == null) {
-                _snackbar.postValue("Something went wrong!")
+               Log.d(TAG, "raw data is null")
             } else {
+                Log.d(TAG,"raw data is not null, $raw")
                 val channel = parser.parse(raw)
                 _rssChannel.postValue(channel)
             }

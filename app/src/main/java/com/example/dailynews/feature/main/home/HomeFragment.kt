@@ -13,7 +13,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.example.dailynews.MainActivity
 import com.example.dailynews.R
 import com.example.dailynews.databinding.FragmentHomeBinding
 import com.example.dailynews.utils.Constants
@@ -30,33 +29,38 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private val linearLayoutManager = LinearLayoutManager(context)
 
     override fun onAttach(context: Context) {
+        Log.d(TAG,"onAttach")
         super.onAttach(context)
         mContext = context
+    }
+
+    override fun onRefresh() {
+        Log.d(TAG,"onRefresh")
+        binding.layoutRefresh.isRefreshing = false
+        mAdapter.clear()
+        loadParserData()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d(TAG,"onCreateView")
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         initView()
         return binding.root
     }
 
-    override fun onRefresh() {
-        binding.layoutRefresh.isRefreshing = false
-    }
-
     private fun initView() {
+        Log.d(TAG,"initView")
         binding.layoutRefresh.setOnRefreshListener(this)
-
-        parser = Parser.Builder()
-            .context(mContext)
-            .charset(Charset.forName("ISO-8859-7"))
-            .cacheExpirationMillis(24L * 60L * 60L * 100L) // one day
-            .build()
-
-        initRVLayout()
+            parser = Parser.Builder()
+                .context(mContext)
+                .charset(Charset.forName("ISO-8859-7"))
+                .cacheExpirationMillis(24L * 60L * 60L * 100L) // one day
+                .build()
+            initRVLayout()
+            loadParserData()
     }
 
     private fun initRVLayout() {
@@ -65,18 +69,23 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             setHasFixedSize(true)
             layoutManager = linearLayoutManager
             itemAnimator = DefaultItemAnimator()
+            mAdapter = HomeRVAdapter()
+            adapter = mAdapter
         }
 
-        viewModel.rssChannel.observe(viewLifecycleOwner, { channel ->
-            if (channel != null) {
-//                if (channel.title != null) {
-//                    title = channel.title
-//                }
-                mAdapter = HomeRVAdapter(channel.articles)
-                binding.rvNewsList.adapter = mAdapter
-            }
-        })
+            viewModel.rssChannel.observe(viewLifecycleOwner, { channel ->
+                if (channel != null) {
+                    Log.i(TAG,"rssChannel observe In, channel:$channel\n channel.articles:${channel.articles}")
+                    mAdapter.addItems(channel.articles)
+                    binding.rvNewsList.adapter = mAdapter
+                }
+            })
 
+    }
+
+    private fun loadParserData() {
+        Log.d(TAG,"loadParserData")
+        viewModel.fetchForUrlAndParseRawData(Constants.GoogleRSS.BASE_URL)
     }
 
     companion object {

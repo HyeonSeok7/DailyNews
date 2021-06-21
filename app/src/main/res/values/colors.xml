@@ -6,7 +6,6 @@
 
     <!-- Default Color -->
     <color name="dark_gray">#707070</color>
-    <color name="light_gray">#EDEDED</color>
 
 
     <color name="purple_200">#FFBB86FC</color>
@@ -16,4 +15,9 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Light Color -->
+    <color name="light_gray">#EDEDED</color>
+    <color name="light_black2">#1c1c1c</color>
+
 </resources>

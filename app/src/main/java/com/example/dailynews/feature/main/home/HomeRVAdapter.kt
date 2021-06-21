@@ -1,5 +1,6 @@
 package com.example.dailynews.feature.main.home
 
+import android.content.Intent
 import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,13 +14,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.dailynews.R
 import com.example.dailynews.bindViewTitleImg
 import com.example.dailynews.databinding.ItemNewsBinding
+import com.example.dailynews.feature.ArticleDetailActivity
+import com.example.dailynews.utils.Constants
 import com.prof.rssparser.Article
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
-class HomeRVAdapter(private val articles: MutableList<Article>) : RecyclerView.Adapter<HomeRVAdapter.ViewHolder>() {
+class HomeRVAdapter : RecyclerView.Adapter<HomeRVAdapter.ViewHolder>() {
+
+    private val articles: MutableList<Article> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        Log.v(TAG,"onCreateViewHolder")
         return ViewHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
@@ -29,27 +36,25 @@ class HomeRVAdapter(private val articles: MutableList<Article>) : RecyclerView.A
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        Log.v(TAG, "onBindViewHolder")
         val item = articles[position]
         holder.apply {
             bind(item, View.OnClickListener {
-                val articleView = WebView(itemView.context)
-
-                articleView.apply {
-                    settings.loadWithOverviewMode = true
-                    settings.javaScriptEnabled = true
-                    isHorizontalScrollBarEnabled = false
-                    webChromeClient = WebChromeClient()
-                    loadDataWithBaseURL(null, "<style>img{display: inline; height: auto; max-width: 100%;} " +
-                            "</style>\n" + "<style>iframe{ height: auto; width: auto;}" + "</style>\n" + item.content, null, "utf-8", null)
+                itemView.context.apply {
+                    val intent = Intent(this, ArticleDetailActivity::class.java)
+                    intent.putExtra(Constants.ExtraKey.KEY_WEB_URL, item.link)
+                    intent.putExtra(Constants.ExtraKey.KEY_SOURCE_NAME, item.sourceName)
+                    startActivity(intent)
                 }
-                val alertDialog = androidx.appcompat.app.AlertDialog.Builder(itemView.context).create()
-                alertDialog.setTitle(item.title)
-                alertDialog.setView(articleView)
-                alertDialog.setButton(androidx.appcompat.app.AlertDialog.BUTTON_NEUTRAL, "OK"
-                ) { dialog, _ -> dialog.dismiss() }
-                alertDialog.show()
-
-                (alertDialog.findViewById<View>(android.R.id.message) as TextView).movementMethod = LinkMovementMethod.getInstance()
+//                val articleView = WebView(itemView.context)
+//                articleView.apply {
+//                    settings.loadWithOverviewMode = true
+//                    settings.javaScriptEnabled = true
+//                    isHorizontalScrollBarEnabled = false
+//                    webChromeClient = WebChromeClient()
+//                    loadDataWithBaseURL(null, "<style>img{display: inline; height: auto; max-width: 100%;} " +
+//                            "</style>\n" + "<style>iframe{ height: auto; width: auto;}" + "</style>\n" + item.content, null, "utf-8", null)
+//                }
 
             })
         }
@@ -57,10 +62,23 @@ class HomeRVAdapter(private val articles: MutableList<Article>) : RecyclerView.A
 
     override fun getItemCount() = articles.size
 
+    fun addItems(newItems: List<Article>) {
+        Log.e(TAG,"newItems:$newItems")
+        articles.addAll(newItems)
+        notifyDataSetChanged()
+    }
+
+    fun clear() {
+        articles.clear()
+        notifyDataSetChanged()
+    }
+
     inner class ViewHolder(private val binding: ItemNewsBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(article: Article, listener:View.OnClickListener) {
-            Log.i(TAG,"Article:$article")
+            Log.v(TAG,"Article:$article")
             binding.apply {
+                this.data = article
+
                 var pubDateString = article.pubDate
 
                 try {
@@ -77,10 +95,10 @@ class HomeRVAdapter(private val articles: MutableList<Article>) : RecyclerView.A
                     Log.e(TAG,"error:$e")
                 }
 
-                this.apply {
-                    tvContents.text = article.title
-                    bindViewTitleImg(ivThumbnailsImage, article)
-                }
+//                this.apply {
+//                    tvContents.text = article.title
+//                    bindViewTitleImg(ivThumbnailsImage, article)
+//                }
 
                 itemView.setOnClickListener(listener)
 

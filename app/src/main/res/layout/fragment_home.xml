@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.prof.rssparser.Channel"/>
+        <variable
+            name="channel"
+            type="com.prof.rssparser.Channel" />
+        <variable
+            name="article"
+            type="com.prof.rssparser.Article" />
+    </data>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -69,6 +80,7 @@
                     android:layout_marginTop="25dp"
                     android:overScrollMode="never"
                     android:scrollbars="none"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_breaking_news_title"
                     tools:listitem="@layout/item_news" />
@@ -77,6 +89,7 @@
                     android:id="@+id/layout_empty"
                     layout="@layout/layout_empty"
                     app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="gone"
                     tools:visibility="gone" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

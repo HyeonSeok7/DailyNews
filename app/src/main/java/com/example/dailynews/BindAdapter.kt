@@ -1,5 +1,11 @@
 package com.example.dailynews
 
+import android.annotation.SuppressLint
+import android.util.Log
+import android.webkit.WebChromeClient
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
@@ -19,8 +25,38 @@ fun bindViewLoadingGif(view: ImageView, data: String) {
 }
 
 @BindingAdapter("bindTitleImg")
-fun bindViewTitleImg(view: ImageView, data: Article) {
-    Glide.with(view.context)
-        .load(data.image)
-        .into(view)
+fun bindViewTitleImg(view: ImageView, url: String?) {
+    if (url.isNullOrEmpty()) {
+        Glide.with(view.context)
+            .load(R.mipmap.image_news)
+            .into(view)
+    } else Log.d("bindTitleImg", "=> $url")
+
+}
+
+@SuppressLint("SetJavaScriptEnabled")
+@BindingAdapter("bindWebUrl")
+fun bindViewWebViewUrl(view:WebView, url: String?) {
+    if (url.isNullOrEmpty()) {
+        Log.d("bindWebUrl", "is null url:$url")
+    } else {
+        view.settings.apply {
+            javaScriptEnabled = true
+            javaScriptCanOpenWindowsAutomatically = true // window.open()을 사용하기 위함
+            allowFileAccessFromFileURLs = true
+            saveFormData = false
+            savePassword = false
+            useWideViewPort = true // html 컨테츠가 웹뷰에 맞게
+            setSupportMultipleWindows(true)
+            layoutAlgorithm = WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING
+        }
+        view.apply {
+            /* 리다이렉트 할 때 브라우저 열리는 것 방지*/
+            webViewClient = WebViewClient()
+            webChromeClient = WebChromeClient()
+
+            /* 웹 뷰 띄우기 */
+            url.let { loadUrl(it) }
+        }
+    }
 }

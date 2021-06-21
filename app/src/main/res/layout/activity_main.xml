@@ -22,6 +22,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:textSize="18sp"
+                android:fontFamily="@font/news_cycle_bold"
                 android:textColor="@color/colorPrimary"
                 android:text="@string/app_name"
                 tools:text="@string/app_name"/>

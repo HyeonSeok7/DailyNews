@@ -25,8 +25,13 @@
     <string name="description_new_image">New 이미지</string>
     <string name="description_save_image">save 이미지</string>
     <string name="description_empty_box_image">빈 박스 이미지</string>
+    <string name="description_image_close">닫기 이미지</string>
+
 
     <!-- Content Title -->
     <string name="content_breaking_news_title_text">Breaking news</string>
+
+    <!-- Content Empty -->
+    <style name="content_empty_title">empty title</style>
 
 </resources>
