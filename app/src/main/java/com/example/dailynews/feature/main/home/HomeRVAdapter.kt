@@ -26,6 +26,7 @@ import kotlin.collections.ArrayList
 class HomeRVAdapter : RecyclerView.Adapter<HomeRVAdapter.ViewHolder>() {
 
     private val articles: MutableList<Article> = ArrayList()
+    private var imgUrl: String = ""
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         Log.v(TAG,"onCreateViewHolder")
@@ -41,6 +42,7 @@ class HomeRVAdapter : RecyclerView.Adapter<HomeRVAdapter.ViewHolder>() {
         Log.v(TAG, "onBindViewHolder")
         val item = articles[position]
         holder.apply {
+
             bind(item) {
                 itemView.context.apply {
                     val intent = Intent(this, ArticleDetailActivity::class.java)
@@ -79,12 +81,11 @@ class HomeRVAdapter : RecyclerView.Adapter<HomeRVAdapter.ViewHolder>() {
             Log.v(TAG,"Article:$article")
             binding.apply {
                 this.data = article
+                this.imgUrl = ThumbnailsParser.thumbnailsParser(article.link)
+//                this.imgUrl = ThumbnailsParser.thumbnailsParser(article.link)
+                itemView.setOnClickListener(listener)
 
-                Glide.with(this.ivThumbnailsImage)
-                    .load(ThumbnailsParser.thumbnailsParser(article.link))
-                    .thumbnail(0.15f)
-                    .into(this.ivThumbnailsImage)
-
+//                bindViewTitleImg(this.ivThumbnailsImage, ThumbnailsParser.thumbnailsParser(article.link))
 //                var pubDateString = article.pubDate
 //
 //                try {
@@ -100,17 +101,6 @@ class HomeRVAdapter : RecyclerView.Adapter<HomeRVAdapter.ViewHolder>() {
 //                } catch (e: Exception) {
 //                    Log.e(TAG,"error:$e")
 //                }
-
-
-
-//                this.apply {
-//                    tvContents.text = article.title
-//                    bindViewTitleImg(ivThumbnailsImage, article)
-//                }
-
-                itemView.setOnClickListener(listener)
-
-
             }
         }
     }

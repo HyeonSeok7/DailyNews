@@ -1,15 +1,19 @@
 package com.example.dailynews
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import com.prof.rssparser.Article
 
 
@@ -26,12 +30,22 @@ fun bindViewLoadingGif(view: ImageView, data: String) {
 
 @BindingAdapter("bindTitleImg")
 fun bindViewTitleImg(view: ImageView, url: String?) {
+    val requestOptions = RequestOptions().apply {
+        placeholder(R.mipmap.image_news)
+        centerCrop()
+    }
     if (url.isNullOrEmpty()) {
         Glide.with(view.context)
             .load(R.mipmap.image_news)
+            .apply(requestOptions)
+            .thumbnail(0.1f)
             .into(view)
     } else {
-        Log.d("bindTitleImg", "=> $url")
+        Glide.with(view.context)
+            .load(url)
+            .thumbnail(0.1f)
+            .apply(requestOptions)
+            .into(view)
     }
 
 }
