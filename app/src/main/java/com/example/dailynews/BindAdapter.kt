@@ -30,7 +30,9 @@ fun bindViewTitleImg(view: ImageView, url: String?) {
         Glide.with(view.context)
             .load(R.mipmap.image_news)
             .into(view)
-    } else Log.d("bindTitleImg", "=> $url")
+    } else {
+        Log.d("bindTitleImg", "=> $url")
+    }
 
 }
 
