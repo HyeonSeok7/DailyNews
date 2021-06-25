@@ -10,7 +10,7 @@
 
         <variable
             name="data"
-            type="com.prof.rssparser.Article" />
+            type="com.hy.dailynews.models.News" />
         <variable
             name="imgUrl"
             type="String" />
@@ -63,8 +63,7 @@
             app:layout_constraintStart_toEndOf="@+id/cv_thumbnails"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="[아시아 경제 조슬기나 기자] 구글 무임승차에도, 국회는 시간끌기..힘 빠진 구글 갑질 방지법 어떠나" />
-        <!--android:lineSpacingExtra="5dp"-->
-<!--android:fontFamily="@font/cafe24ohsquare"-->
+
         <ImageView
             android:id="@+id/iv_new"
             android:layout_width="25dp"
