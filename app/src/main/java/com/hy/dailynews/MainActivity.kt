@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.hy.dailynews.feature.main.home.HomeFragment
-import com.hy.dailynews.feature.main.home.HomeFragment1
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.yesButton
@@ -32,10 +31,10 @@ class MainActivity : AppCompatActivity() {
     private fun initView(savedInstanceState: Bundle?) {
         val fm: FragmentManager = supportFragmentManager
         if (savedInstanceState == null) {
-            fragment = HomeFragment1.newInstance()
+            fragment = HomeFragment.newInstance()
             val transaction = fm.beginTransaction()
             transaction.apply {
-                replace(R.id.layout_frame,  fragment as HomeFragment1)
+                replace(R.id.layout_frame,  fragment as HomeFragment)
                 commit()
             }
         } else {

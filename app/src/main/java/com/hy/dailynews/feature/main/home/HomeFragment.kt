@@ -7,86 +7,72 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.hy.dailynews.R
 import com.hy.dailynews.databinding.FragmentHomeBinding
-import com.prof.rssparser.Parser
+
 
 class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var mAdapter: HomeListAdapter
     private lateinit var mContext: Context
-    private lateinit var mAdapter: HomeRVAdapter
-    private lateinit var parser: Parser
-//    private val viewModel: HomeViewModel by viewModels()
-    private val homeViewModel: HomeViewModel by viewModels()
-    private val linearLayoutManager = LinearLayoutManager(context)
+    private lateinit var homeViewModel: HomeNewsListViewModel
 
     override fun onAttach(context: Context) {
-        Log.d(TAG,"onAttach")
+        Log.d(TAG, "onAttach")
         super.onAttach(context)
         mContext = context
     }
 
     override fun onRefresh() {
-        Log.d(TAG,"onRefresh")
+        Log.d(TAG, "onRefresh")
         binding.layoutRefresh.isRefreshing = false
         mAdapter.clear()
-//        loadParserData()
+        homeViewModel.updateNewsData()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(TAG,"onCreateView")
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
-//        binding = FragmentHomeBinding.inflate(layoutInflater)
-        initView()
+
+        binding = FragmentHomeBinding.inflate(inflater).apply {
+            val homeListViewModelFactory = HomeNewsListViewModelFactory(HomeRepository(RemoteNewsData()))
+            homeViewModel = ViewModelProvider(requireActivity(), homeListViewModelFactory).get(HomeNewsListViewModel::class.java)
+            viewModel = homeViewModel
+        }
+
+        binding.layoutRefresh.setOnRefreshListener(this)
+        initRVLayout()
+        setUpData()
         return binding.root
     }
 
-    private fun initView() {
-        Log.d(TAG,"initView")
-//        binding.layoutRefresh.setOnRefreshListener(this)
-//            parser = Parser.Builder()
-//                .context(mContext)
-//                .charset(Charset.forName("ISO-8859-7"))
-//                .cacheExpirationMillis(24L * 60L * 60L * 100L) // one day
-//                .build()
-            initRVLayout()
-//            loadParserData()
-    }
-
     private fun initRVLayout() {
-        Log.v(TAG,"initRVLayout")
+        Log.d(TAG, "initRVLayout")
+        mAdapter = HomeListAdapter(mContext)
+            .apply {
+                setHasStableIds(true)
+            }
         binding.rvNewsList.apply {
-            setHasFixedSize(true)
-            layoutManager = linearLayoutManager
-            itemAnimator = DefaultItemAnimator()
-            mAdapter = HomeRVAdapter()
-            adapter = mAdapter
+            this.adapter = mAdapter
+            layoutManager = LinearLayoutManager(context)
         }
-
-//            viewModel.rssChannel.observe(viewLifecycleOwner, { channel ->
-//                if (channel != null) {
-//                    Log.i(TAG,"rssChannel observe In, channel:$channel\n channel.articles:${channel.articles}")
-//                    mAdapter.addItems(channel.articles)
-//                    binding.rvNewsList.adapter = mAdapter
-//                }
-//            })
-
     }
 
-//    private fun loadParserData() {
-//        Log.d(TAG,"loadParserData")
-//        viewModel.fetchForUrlAndParseRawData(Constants.GoogleRSS.BASE_URL)
-//    }
+    private fun setUpData() {
+        // 뉴스 세팅
+        homeViewModel.newsList.observe(viewLifecycleOwner, { data ->
+            mAdapter.clear()
+            mAdapter.addItems(data)
+        })
+
+
+    }
 
     companion object {
         private val TAG = HomeFragment::class.java.simpleName
@@ -94,6 +80,6 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         fun newInstance() = HomeFragment().apply {
             arguments = bundleOf()
         }
-    }
 
+    }
 }
