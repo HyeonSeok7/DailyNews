@@ -49,6 +49,7 @@ class RemoteNewsData : DataSource {
             val title = doc.select("meta[property=og:title]").first()?.attr("content")
                 ?: doc.select("title").first().html()
             val image = doc.select("meta[property=og:image]").first()?.attr("content") ?: ""
+            val siteName = doc.select("meta[property=og:site_name]").first()?.attr("content") ?: ""
             val description = doc.select("meta[property=og:description]").first()?.attr("content")
                 ?: doc.select("description").first()?.text()
                 ?: doc.select("meta[name=description]").attr("content")
@@ -57,6 +58,7 @@ class RemoteNewsData : DataSource {
                 newsUrl,
                 title,
                 image,
+                siteName,
                 description
             )
         } catch (e: Exception) {
@@ -75,6 +77,7 @@ class RemoteNewsData : DataSource {
             val rssXML = document.html()
             val rssXmlStrReader = StringReader(rssXML)
             val factory = XmlPullParserFactory.newInstance().apply { isNamespaceAware }
+            Log.e(TAG,"rssXML:$rssXML")
             factory.newPullParser().apply { setInput(rssXmlStrReader) }
         }
 

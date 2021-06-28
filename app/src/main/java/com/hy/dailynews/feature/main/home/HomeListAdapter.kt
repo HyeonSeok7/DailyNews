@@ -20,8 +20,7 @@ class HomeListAdapter(private val mContext: Context) :
     RecyclerView.Adapter<HomeListAdapter.ViewHolder>() {
 
     private val items: ArrayList<News> = ArrayList()
-
-    private lateinit var mOnClickListener: OnNewsClickListener
+    var onClick: (News) -> Unit = {}
 
     fun addItems(newItems: List<News>?) {
         Log.v(TAG, "newItems:$newItems")
@@ -53,12 +52,10 @@ class HomeListAdapter(private val mContext: Context) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        holder.apply {
-            bind(item)
-        }
+        holder.bind(item)
+        holder.itemView.setOnClickListener { onClick(item) }
     }
 
-    //    inner class ViewHolder (override val containerView: View): RecyclerView.ViewHolder(containerView)
     class ViewHolder(private val binding: ItemNewsBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: News) {
             CoroutineScope(Dispatchers.Main).launch {

@@ -25,11 +25,11 @@ class HomeNewsListViewModel(private val repository: HomeRepository) : ViewModel(
 
     init {
         updateNewsData()
-        _progress.value = true
-        _newsList.value = mutableListOf()
     }
 
     fun updateNewsData() {
+        _progress.value = true
+        _newsList.value = mutableListOf()
         viewModelScope.launch {
             val data = repository.getAllNews()
             data.onCompletion { _progress.value = false }.collect {

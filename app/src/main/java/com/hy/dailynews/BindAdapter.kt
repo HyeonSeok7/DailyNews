@@ -30,6 +30,7 @@ fun bindViewTitleImg(view: ImageView, url: String?) {
         placeholder(R.mipmap.image_news)
         centerCrop()
     }
+
     if (url.isNullOrEmpty()) {
         Log.e("bindTitleImg", "=> is Null")
         Glide.with(view.context)

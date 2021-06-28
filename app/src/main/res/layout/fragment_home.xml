@@ -2,12 +2,7 @@
 <layout>
 
     <data>
-
         <import type="android.view.View" />
-
-        <variable
-            name="viewModel"
-            type="com.hy.dailynews.feature.main.home.HomeNewsListViewModel" />
     </data>
 
 
@@ -67,7 +62,7 @@
                     android:fontFamily="@font/cafe24ohsquare"
                     android:text="@string/content_breaking_news_title_text"
                     android:textColor="@color/black"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/indicator"
                     tools:text="Breaking news" />

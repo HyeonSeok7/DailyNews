@@ -6,18 +6,17 @@ import android.util.Log
 import android.view.View
 import com.hy.dailynews.R
 import com.hy.dailynews.bindViewWebViewUrl
-import com.hy.dailynews.databinding.ActivityArticleDetailBinding
+import com.hy.dailynews.databinding.ActivityNewsDetailBinding
 import com.hy.dailynews.utils.Constants
 
-class ArticleDetailActivity : AppCompatActivity(), View.OnClickListener {
+class NewsDetailActivity : AppCompatActivity(), View.OnClickListener {
 
-    private lateinit var binding: ActivityArticleDetailBinding
-
+    private lateinit var binding: ActivityNewsDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityArticleDetailBinding.inflate(layoutInflater)
+        binding = ActivityNewsDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initHasExtra()
     }
@@ -35,15 +34,15 @@ class ArticleDetailActivity : AppCompatActivity(), View.OnClickListener {
                 bindViewWebViewUrl(binding.wvArticle, it.toString())
             }
         }
-        if (intent.hasExtra(Constants.ExtraKey.KEY_SOURCE_NAME)) {
-            intent.getSerializableExtra(Constants.ExtraKey.KEY_SOURCE_NAME).let {
-                Log.v(TAG,"sourceName:$it")
+        if (intent.hasExtra(Constants.ExtraKey.KEY_SITE_NAME)) {
+            intent.getSerializableExtra(Constants.ExtraKey.KEY_SITE_NAME).let {
+                Log.v(TAG,"siteName:$it")
                 binding.layoutAppbar.title = it.toString()
             }
         }
     }
 
     companion object {
-        private val TAG = ArticleDetailActivity::class.java.simpleName
+        private val TAG = NewsDetailActivity::class.java.simpleName
     }
 }

@@ -1,6 +1,7 @@
 package com.hy.dailynews.feature.main.home
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,9 +11,13 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.hy.dailynews.databinding.FragmentHomeBinding
+import com.hy.dailynews.feature.NewsDetailActivity
+import com.hy.dailynews.models.News
+import com.hy.dailynews.utils.Constants
 
 
 class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -23,14 +28,11 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var homeViewModel: HomeNewsListViewModel
 
     override fun onAttach(context: Context) {
-        Log.d(TAG, "onAttach")
         super.onAttach(context)
         mContext = context
     }
 
     override fun onRefresh() {
-        Log.d(TAG, "onRefresh")
-        binding.layoutRefresh.isRefreshing = false
         mAdapter.clear()
         homeViewModel.updateNewsData()
     }
@@ -43,7 +45,6 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         binding = FragmentHomeBinding.inflate(inflater).apply {
             val homeListViewModelFactory = HomeNewsListViewModelFactory(HomeRepository(RemoteNewsData()))
             homeViewModel = ViewModelProvider(requireActivity(), homeListViewModelFactory).get(HomeNewsListViewModel::class.java)
-            viewModel = homeViewModel
         }
 
         binding.layoutRefresh.setOnRefreshListener(this)
@@ -53,14 +54,16 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun initRVLayout() {
-        Log.d(TAG, "initRVLayout")
         mAdapter = HomeListAdapter(mContext)
             .apply {
                 setHasStableIds(true)
+                onClick = this@HomeFragment::startDetailNewsActivity
             }
+
         binding.rvNewsList.apply {
             this.adapter = mAdapter
             layoutManager = LinearLayoutManager(context)
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
     }
 
@@ -70,8 +73,17 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             mAdapter.clear()
             mAdapter.addItems(data)
         })
+        homeViewModel.progress.observe(viewLifecycleOwner, { bar ->
+            binding.layoutRefresh.isRefreshing = bar
+        })
+    }
 
-
+    private fun startDetailNewsActivity(news: News) {
+        startActivity(Intent(context, NewsDetailActivity::class.java)
+            .apply {
+                putExtra(Constants.ExtraKey.KEY_WEB_URL, news.url)
+                putExtra(Constants.ExtraKey.KEY_SITE_NAME, news.siteName)
+            })
     }
 
     companion object {

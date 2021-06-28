@@ -31,7 +31,7 @@ class HomeViewModel: ViewModel() {
         viewModelScope.launch {
             try {
                 val channel = parser.getChannel(Constants.GoogleRSS.BASE_URL)
-                _rssChannel.postValue(channel)
+                channel.articles
             } catch (e: Exception) {
                 e.printStackTrace()
                 _rssChannel.postValue(Channel(null, null, null, null, null, null, mutableListOf()))
