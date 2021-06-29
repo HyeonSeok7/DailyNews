@@ -1,9 +1,9 @@
 package com.hy.dailynews.feature.main.home
 
 import android.util.Log
-import com.hy.dailynews.utils.listeners.DataSource
 import com.hy.dailynews.models.News
 import com.hy.dailynews.utils.Constants
+import com.hy.dailynews.utils.listeners.DataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -11,7 +11,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import org.jetbrains.anko.doBeforeSdk
 import org.jsoup.Jsoup
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
@@ -21,6 +20,7 @@ import kotlin.system.measureTimeMillis
 class RemoteNewsData : DataSource {
 
     override fun getAllNews(): Flow<News> = flow {
+
         val time = measureTimeMillis {
             val newsUrls = getUrlFromRss(Constants.GoogleRSS.BASE_URL)
             val newsAsync = mutableListOf<Deferred<News?>>()
@@ -55,6 +55,7 @@ class RemoteNewsData : DataSource {
                 ?: doc.select("meta[name=description]").attr("content")
 
             return News(
+                null,
                 newsUrl,
                 title,
                 image,
@@ -100,7 +101,6 @@ class RemoteNewsData : DataSource {
         }
         return newsUrls
     }
-
 
     companion object {
 

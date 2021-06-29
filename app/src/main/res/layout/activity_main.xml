@@ -1,55 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+<layout>
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/layout_appbar"
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="network"
+            type="Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:background="@color/white"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/layout_appbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textSize="18sp"
-                android:fontFamily="@font/news_cycle_bold"
-                android:textColor="@color/colorPrimary"
-                android:text="@string/app_name"
-                tools:text="@string/app_name"/>
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/white">
 
-        </androidx.appcompat.widget.Toolbar>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/news_cycle_bold"
+                    android:gravity="center"
+                    android:text="@string/app_name"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    tools:text="@string/app_name" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+            </androidx.appcompat.widget.Toolbar>
 
-    <FrameLayout
-        android:id="@+id/layout_frame"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/layout_bottom_navigation"
-        app:layout_constraintTop_toBottomOf="@+id/layout_appbar" />
+        </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/layout_bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:clipToPadding="false"
-        app:itemIconTint="@color/selector_navigation"
-        app:itemTextColor="@color/selector_navigation"
-        app:labelVisibilityMode="unlabeled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/menu_navigation" />
+        <FrameLayout
+            android:id="@+id/layout_frame"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/layout_bottom_navigation"
+            app:layout_constraintTop_toBottomOf="@+id/layout_appbar" />
+
+        <include
+            android:id="@+id/layout_empty"
+            layout="@layout/layout_empty"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
+<!--android:visibility="@{network ? View.GONE : View.VISIBLE}"-->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/layout_bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:clipToPadding="false"
+            app:itemIconTint="@color/selector_navigation"
+            app:itemTextColor="@color/selector_navigation"
+            app:labelVisibilityMode="unlabeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:menu="@menu/menu_navigation" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

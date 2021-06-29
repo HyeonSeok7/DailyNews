@@ -26,12 +26,14 @@
     <string name="description_save_image">save 이미지</string>
     <string name="description_empty_box_image">빈 박스 이미지</string>
     <string name="description_image_close">닫기 이미지</string>
+    <string name="description_image_banner">배너 이미지</string>
 
 
     <!-- Content Title -->
     <string name="content_breaking_news_title_text">Breaking news</string>
 
     <!-- Content Empty -->
-    <style name="content_empty_title">empty title</style>
+    <string name="content_empty_title">empty title</string>
+    <string name="content_no_network_connection">인터넷 연결을 확인해주세요.</string>
 
 </resources>

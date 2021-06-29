@@ -93,5 +93,6 @@ dependencies {
     // Jsoup
     implementation 'org.jsoup:jsoup:1.13.1'
 
-    implementation "androidx.activity:activity-ktx:1.2.3"
+    // Auto Slider
+    implementation 'com.github.smarteist:autoimageslider:1.4.0-appcompat'
 }

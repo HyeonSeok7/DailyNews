@@ -9,7 +9,6 @@ class HomeRepository(private val remoteNewsData: RemoteNewsData) : DataSource {
     override fun getAllNews(): Flow<News> {
         return remoteNewsData.getAllNews()
     }
-
     companion object {
         private var instance: HomeRepository? = null
 
