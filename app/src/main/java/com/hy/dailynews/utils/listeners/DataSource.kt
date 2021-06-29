@@ -5,4 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface DataSource {
     fun getAllNews(): Flow<News>
+    fun getBestAllNews(): Flow<News>
 }

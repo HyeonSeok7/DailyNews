@@ -3,6 +3,7 @@ package com.hy.dailynews.feature.main.home
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -36,6 +37,7 @@ class HomeFragment1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         mAdapter.clear()
 //        homeViewModel.updateBestNewsData()
         homeViewModel.updateNewsData()
+        homeViewModel.updateBestNewsData()
     }
 
     override fun onCreateView(
@@ -53,11 +55,6 @@ class HomeFragment1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         return binding.root
     }
 
-    private fun loadNewsData() {
-        homeViewModel.updateNewsData()
-//        homeViewModel.updateBestNewsData()
-    }
-
     private fun initRVLayout() {
         mAdapter = NewsListAdapter()
             .apply {
@@ -72,11 +69,23 @@ class HomeFragment1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun setUpData() {
-        loadNewsData()
+        val bannerData = News().apply { itemType = Constants.ViewType.BANNER_TYPE }
+        val titleData = News().apply { itemType = Constants.ViewType.TITLE_TYPE }
+        val newListData = News().apply { itemType = Constants.ViewType.NEWS_LIST_TYPE }
+        mAdapter.addItems(listOf(bannerData, titleData, newListData))
+
         // 뉴스 세팅
         homeViewModel.newsList.observe(viewLifecycleOwner, { data ->
-            mAdapter.clear()
+            // viewType 또한 reset 해줘야함
+//            mAdapter.clear()
             mAdapter.addItems(data)
+        })
+
+        homeViewModel.bestNewsList.observe(viewLifecycleOwner, { data ->
+            // viewType 또한 reset 해줘야함
+//            mAdapter.clear()
+//            mAdapter.addItems(data)
+            mAdapter.addBestItems(data)
         })
     }
 

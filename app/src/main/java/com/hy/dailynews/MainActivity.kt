@@ -49,10 +49,10 @@ class MainActivity : AppCompatActivity() {
         if (isOnline()) {
 //            binding.network = isOnline()
             if (savedInstanceState == null) {
-                fragment = HomeFragment.newInstance()
+                fragment = HomeFragment1.newInstance()
                 val transaction = fm.beginTransaction()
                 transaction.apply {
-                    replace(R.id.layout_frame, fragment as HomeFragment)
+                    replace(R.id.layout_frame, fragment as HomeFragment1)
                     commit()
                 }
             } else {

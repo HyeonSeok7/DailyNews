@@ -69,9 +69,7 @@ class NewsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> () {
 
     override fun getItemCount(): Int = items.size
 
-    private fun homeTitleItemRows(holder: HomeTitleViewHolder, position: Int) {
-        holder.apply {}
-    }
+    private fun homeTitleItemRows(holder: HomeTitleViewHolder, position: Int) {}
 
     private fun newsListItemRows(holder: NewsListViewHolder, position: Int) {
         val item = items[position]
@@ -82,8 +80,20 @@ class NewsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> () {
     fun addItems(newItems: List<News>?) {
         Log.v(TAG, "newItems:$newItems")
         newItems?.let {
+            it.forEach{ data ->
+                data.itemType = Constants.ViewType.NEWS_LIST_TYPE
+            }
             items.addAll(it)
             notifyDataSetChanged()
+        }
+    }
+
+    fun addBestItems(newItems: List<News>?) {
+        Log.e(TAG,"bestNewItem:$newItems")
+        newItems?.let {
+            it.forEach { data ->
+                data.itemType = Constants.ViewType.BANNER_TYPE
+            }
         }
     }
 

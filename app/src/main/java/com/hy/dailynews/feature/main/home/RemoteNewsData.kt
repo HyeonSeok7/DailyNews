@@ -36,6 +36,25 @@ class RemoteNewsData : DataSource {
         Log.d(TAG, "걸린 시간: $time ms")
     }.flowOn(Dispatchers.IO)
 
+    override fun getBestAllNews(): Flow<News> = flow {
+        Log.e(TAG,"getBestAllNews In")
+        val time = measureTimeMillis {
+            val newsUrls = getUrlFromRss(Constants.GoogleRSS.HOT_URL)
+            val newsAsync = mutableListOf<Deferred<News?>>()
+
+            for (newsUrl in newsUrls) {
+                CoroutineScope(Dispatchers.IO).async { getNewsFromUrl(newsUrl) }
+                    .also { newsAsync.add(it) }
+            }
+
+                newsAsync.forEach { it ->
+                    it.await()?.let { emit(it) }
+                }
+            }
+
+        Log.d(TAG, "걸린 시간 best: $time ms")
+    }.flowOn(Dispatchers.IO)
+
     // 기사 url 로부터 News 추출
     private fun getNewsFromUrl(newsUrl: String): News? {
         Log.d(TAG, "getNewsFromUrl:$newsUrl")
@@ -78,7 +97,6 @@ class RemoteNewsData : DataSource {
             val rssXML = document.html()
             val rssXmlStrReader = StringReader(rssXML)
             val factory = XmlPullParserFactory.newInstance().apply { isNamespaceAware }
-            Log.e(TAG,"rssXML:$rssXML")
             factory.newPullParser().apply { setInput(rssXmlStrReader) }
         }
 
@@ -106,11 +124,8 @@ class RemoteNewsData : DataSource {
 
         private val TAG = RemoteNewsData::class.java.simpleName
         private var instance: RemoteNewsData? = null
-
-        fun getInstance() =
-            instance ?: synchronized(this) {
-                instance ?: RemoteNewsData().also { instance = it }
-            }
-
+//        fun getInstance() = instance ?: synchronized(this) {
+//                instance ?: RemoteNewsData().also { instance = it }
+//            }
     }
 }
