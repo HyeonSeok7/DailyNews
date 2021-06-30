@@ -1,12 +1,15 @@
-package com.hy.dailynews.feature.main.home
+package com.hy.dailynews.feature.main.home.viewModels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hy.dailynews.feature.main.home.repositories.HomeRepository
 import com.hy.dailynews.models.News
-import com.hy.dailynews.utils.Constants
+import com.hy.dailynews.models.Newss
 import com.hy.dailynews.utils.SingleLiveEvent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
@@ -14,12 +17,12 @@ import kotlinx.coroutines.launch
 class HomeNewsListViewModel(private val repository: HomeRepository) : ViewModel() {
 
 
-    private val _newsList = SingleLiveEvent<MutableList<News>>()
-    val newsList: SingleLiveEvent<MutableList<News>>
+    private val _newsList = SingleLiveEvent<MutableList<Newss>>()
+    val newsList: SingleLiveEvent<MutableList<Newss>>
         get() = _newsList
 
-    private val _bestNewsList = SingleLiveEvent<MutableList<News>>()
-    val bestNewsList: SingleLiveEvent<MutableList<News>>
+    private val _bestNewsList = SingleLiveEvent<MutableList<Newss>>()
+    val bestNewsList: SingleLiveEvent<MutableList<Newss>>
         get() = _bestNewsList
 
     private val _progress = MutableLiveData<Boolean>()

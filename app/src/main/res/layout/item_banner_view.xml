@@ -7,7 +7,7 @@
         <import type="android.view.View"/>
         <variable
             name="data"
-            type="com.hy.dailynews.models.News"/>
+            type="com.hy.dailynews.models.Newss"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_items"
@@ -26,6 +26,7 @@
             app:layout_constraintTop_toTopOf="parent">
             <ImageView
                 android:id="@+id/image_view"
+                bindBannerImg="@{data.image}"
                 android:contentDescription="@string/description_image_banner"
                 android:adjustViewBounds="true"
                 android:layout_width="match_parent"

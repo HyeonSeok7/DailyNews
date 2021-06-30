@@ -3,16 +3,12 @@ package com.hy.dailynews
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.hy.dailynews.databinding.ActivityMainBinding
-import com.hy.dailynews.feature.main.home.HomeFragment
-import com.hy.dailynews.feature.main.home.HomeFragment1
+import com.hy.dailynews.feature.main.home.HomeFragment2
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.toast
@@ -49,10 +45,10 @@ class MainActivity : AppCompatActivity() {
         if (isOnline()) {
 //            binding.network = isOnline()
             if (savedInstanceState == null) {
-                fragment = HomeFragment1.newInstance()
+                fragment = HomeFragment2.newInstance()
                 val transaction = fm.beginTransaction()
                 transaction.apply {
-                    replace(R.id.layout_frame, fragment as HomeFragment1)
+                    replace(R.id.layout_frame, fragment as HomeFragment2)
                     commit()
                 }
             } else {

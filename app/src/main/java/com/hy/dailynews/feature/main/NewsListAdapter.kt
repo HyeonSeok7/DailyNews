@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hy.dailynews.databinding.ItemBannerBinding
 import com.hy.dailynews.databinding.ItemHomeTitleBinding
 import com.hy.dailynews.databinding.ItemNewsBinding
-import com.hy.dailynews.feature.main.home.HomeBestNewsSliderAdapter
+import com.hy.dailynews.feature.main.home.adapter.HomeBestNewsSliderAdapter
 import com.hy.dailynews.models.News
 import com.hy.dailynews.utils.Constants
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
@@ -20,25 +20,22 @@ class NewsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> () {
 
 
     private val items: ArrayList<News> = ArrayList()
+    private val bestItems: ArrayList<News> = ArrayList()
     var onClick: (News) -> Unit = {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        when(viewType) {
+        return when(viewType) {
             Constants.ViewType.BANNER_TYPE    -> {
                 val binding = ItemBannerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return BannerViewHolder(binding)
-            }
-            Constants.ViewType.TITLE_TYPE     -> {
-                val binding = ItemHomeTitleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return HomeTitleViewHolder(binding)
+                BannerViewHolder(binding)
             }
             Constants.ViewType.NEWS_LIST_TYPE -> {
                 val binding = ItemNewsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return NewsListViewHolder(binding)
+                NewsListViewHolder(binding)
             }
             else -> {
                 val binding = ItemHomeTitleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return HomeTitleViewHolder(binding)
+                HomeTitleViewHolder(binding)
             }
         }
     }
@@ -47,15 +44,15 @@ class NewsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> () {
         items[position].itemType.let {
             return when(items[position].itemType) {
                 Constants.ViewType.BANNER_TYPE    -> Constants.ViewType.BANNER_TYPE
-                Constants.ViewType.TITLE_TYPE     -> Constants.ViewType.TITLE_TYPE
                 Constants.ViewType.NEWS_LIST_TYPE -> Constants.ViewType.NEWS_LIST_TYPE
-                else -> Constants.ViewType.TITLE_TYPE
+                else -> Constants.ViewType.BANNER_TYPE
             }
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = items[position]
+        val bestItems = bestItems[position]
         when(holder) {
             is BannerViewHolder    -> holder.bind(item)
             is HomeTitleViewHolder -> homeTitleItemRows(holder, position)
@@ -94,6 +91,7 @@ class NewsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> () {
             it.forEach { data ->
                 data.itemType = Constants.ViewType.BANNER_TYPE
             }
+
         }
     }
 
@@ -125,7 +123,7 @@ class NewsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> () {
     private class NewsListViewHolder (private val binding : ItemNewsBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: News) {
             CoroutineScope(Dispatchers.Main).launch {
-                binding.data = data
+//                binding.data = data
             }
         }
     }

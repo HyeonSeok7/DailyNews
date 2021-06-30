@@ -34,9 +34,22 @@ class Constants {
     class ViewType {
         companion object {
             const val BANNER_TYPE    = 0
-            const val TITLE_TYPE     = 1
-            const val NEWS_LIST_TYPE = 2
+            const val NEWS_LIST_TYPE = 1
         }
     }
+
+    /* Date Time Key */
+    class Time {
+        companion object {
+            const val SECONDS                        = 1000L
+            const val MINUTES                        = SECONDS * 60
+            const val HOURS                          = MINUTES * 60
+            const val DAYS                           = HOURS * 24
+            const val WEEKS                          = DAYS * 7
+            const val MONTHS                         = WEEKS * 4
+            const val YEARS                          = MONTHS * 30
+        }
+    }
+
 
 }

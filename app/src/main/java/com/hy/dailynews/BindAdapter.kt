@@ -12,22 +12,36 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-
-
-@BindingAdapter("bindLoadingGif")
-fun bindViewLoadingGif(view: ImageView, data: String) {
-    // 임시 명칭 dat
-    // 추후에는 모델로 view 컨트롤
-    Glide.with(view.context)
-        .asGif()
-        .load(R.mipmap.loading_gif)
-        .diskCacheStrategy(DiskCacheStrategy.RESOURCE) // Glide에서 캐싱한 리소스와 로드할 리소스가 같을 때 캐싱된 리소스 사용
-        .into(view)
-}
+import com.hy.dailynews.utils.Constants
+import java.text.SimpleDateFormat
+import java.util.*
 
 @BindingAdapter("bindTitleImg")
 fun bindViewTitleImg(view: ImageView, url: String?) {
     val requestOptions = RequestOptions().apply {
+        placeholder(R.mipmap.image_news)
+        centerCrop()
+    }
+    if (url.isNullOrEmpty()) {
+        Glide.with(view.context)
+            .load(R.mipmap.image_news)
+            .apply(requestOptions)
+            .thumbnail(0.1f)
+            .into(view)
+    } else {
+        Glide.with(view.context)
+            .load(url)
+            .thumbnail(0.1f)
+            .apply(requestOptions)
+            .into(view)
+    }
+
+}
+
+@BindingAdapter("bindBannerImg")
+fun bindViewBannerImg(view: ImageView, url: String?) {
+    val requestOptions = RequestOptions().apply {
+        isMemoryCacheable
         placeholder(R.mipmap.image_news)
         centerCrop()
     }
@@ -70,6 +84,31 @@ fun bindViewWebViewUrl(view:WebView, url: String?) {
 
             /* 웹 뷰 띄우기 */
             url.let { loadUrl(it) }
+        }
+    }
+}
+
+// to Date
+@SuppressLint("SetTextI18n")
+@BindingAdapter("bindToDate")
+fun bindViewToDate(view: TextView, value: String?) {
+    if (value == null) view.text = ""
+    else {
+        val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
+        val date = format.parse(value)
+
+        date?.apply {
+            val time = Calendar.getInstance(Locale.KOREA).timeInMillis - this.time
+            Log.d("bindToDate", "timeMillis => $time")
+            when {
+                time < Constants.Time.MINUTES -> view.text = "${time/Constants.Time.SECONDS}초 전"
+                time < Constants.Time.HOURS   -> view.text = "${time/Constants.Time.MINUTES}분 전"
+                time < Constants.Time.DAYS    -> view.text = "${time/Constants.Time.HOURS}시간 전"
+                time < Constants.Time.WEEKS   -> view.text = "${time/Constants.Time.DAYS}일 전"
+                time < Constants.Time.MONTHS  -> view.text = "${time/Constants.Time.WEEKS}주 전"
+                time < Constants.Time.YEARS   -> view.text = "${time/Constants.Time.MONTHS}개월 전"
+                else                          -> view.text = "${time/Constants.Time.YEARS}년 전"
+            }
         }
     }
 }

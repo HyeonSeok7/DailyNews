@@ -1,7 +1,7 @@
 package com.hy.dailynews.feature.main.home
 
 import android.util.Log
-import com.hy.dailynews.models.News
+import com.hy.dailynews.models.Newss
 import com.hy.dailynews.utils.Constants
 import com.hy.dailynews.utils.listeners.DataSource
 import kotlinx.coroutines.CoroutineScope
@@ -19,11 +19,11 @@ import kotlin.system.measureTimeMillis
 
 class RemoteNewsData : DataSource {
 
-    override fun getAllNews(): Flow<News> = flow {
-
+    override fun getAllNews(): Flow<Newss> = flow {
         val time = measureTimeMillis {
             val newsUrls = getUrlFromRss(Constants.GoogleRSS.BASE_URL)
-            val newsAsync = mutableListOf<Deferred<News?>>()
+            Log.v(TAG,"getAllNews newsUrls:$newsUrls")
+            val newsAsync = mutableListOf<Deferred<Newss?>>()
 
             for (newsUrl in newsUrls) {
                 CoroutineScope(Dispatchers.IO).async { getNewsFromUrl(newsUrl) }
@@ -36,11 +36,10 @@ class RemoteNewsData : DataSource {
         Log.d(TAG, "걸린 시간: $time ms")
     }.flowOn(Dispatchers.IO)
 
-    override fun getBestAllNews(): Flow<News> = flow {
-        Log.e(TAG,"getBestAllNews In")
+    override fun getBestAllNews(): Flow<Newss> = flow {
         val time = measureTimeMillis {
             val newsUrls = getUrlFromRss(Constants.GoogleRSS.HOT_URL)
-            val newsAsync = mutableListOf<Deferred<News?>>()
+            val newsAsync = mutableListOf<Deferred<Newss?>>()
 
             for (newsUrl in newsUrls) {
                 CoroutineScope(Dispatchers.IO).async { getNewsFromUrl(newsUrl) }
@@ -56,12 +55,11 @@ class RemoteNewsData : DataSource {
     }.flowOn(Dispatchers.IO)
 
     // 기사 url 로부터 News 추출
-    private fun getNewsFromUrl(newsUrl: String): News? {
-        Log.d(TAG, "getNewsFromUrl:$newsUrl")
+    private fun getNewsFromUrl(newsUrl: String): Newss? {
         try {
             val doc by lazy {
                 Jsoup.connect(newsUrl)
-//                    .timeout(1500)
+                    .timeout(1500)
                     .get()
                     .head()
             }
@@ -72,15 +70,17 @@ class RemoteNewsData : DataSource {
             val description = doc.select("meta[property=og:description]").first()?.attr("content")
                 ?: doc.select("description").first()?.text()
                 ?: doc.select("meta[name=description]").attr("content")
+            val date = doc
 
-            return News(
-                null,
+            return Newss(
                 newsUrl,
                 title,
                 image,
                 siteName,
-                description
+                description,
+
             )
+
         } catch (e: Exception) {
             e.printStackTrace()
             return null
