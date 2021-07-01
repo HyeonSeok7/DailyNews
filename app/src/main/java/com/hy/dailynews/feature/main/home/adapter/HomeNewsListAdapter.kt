@@ -4,13 +4,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.tabs.TabLayout
 import com.hy.dailynews.databinding.ItemBannerBinding
 import com.hy.dailynews.databinding.ItemNewsBinding
 import com.hy.dailynews.feature.main.home.holder.BannerHolder
 import com.hy.dailynews.feature.main.home.holder.NewsListHolder
 import com.hy.dailynews.models.HomeModel
-import com.hy.dailynews.models.Newss
 import com.hy.dailynews.utils.Constants
 
 class HomeNewsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> () {
@@ -25,7 +23,6 @@ class HomeNewsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> () {
 
     fun bannerModel(model: HomeModel) {
         bannerItems.add(model)
-        notifyDataSetChanged()
     }
 
     fun bannerClear() {

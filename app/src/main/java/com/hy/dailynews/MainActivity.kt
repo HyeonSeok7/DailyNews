@@ -8,7 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.hy.dailynews.databinding.ActivityMainBinding
-import com.hy.dailynews.feature.main.home.HomeFragment2
+import com.hy.dailynews.feature.main.home.HomeFragment
+import com.hy.dailynews.feature.main.home.HomeFragment1
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.toast
@@ -45,10 +46,10 @@ class MainActivity : AppCompatActivity() {
         if (isOnline()) {
 //            binding.network = isOnline()
             if (savedInstanceState == null) {
-                fragment = HomeFragment2.newInstance()
+                fragment = HomeFragment1.newInstance()
                 val transaction = fm.beginTransaction()
                 transaction.apply {
-                    replace(R.id.layout_frame, fragment as HomeFragment2)
+                    replace(R.id.layout_frame, fragment as HomeFragment1)
                     commit()
                 }
             } else {

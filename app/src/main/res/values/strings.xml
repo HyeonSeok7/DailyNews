@@ -30,7 +30,7 @@
 
 
     <!-- Content Title -->
-    <string name="content_breaking_news_title_text">Breaking news</string>
+    <string name="content_breaking_news_title_text">Recent news</string>
 
     <!-- Content Empty -->
     <string name="content_empty_title">empty title</string>

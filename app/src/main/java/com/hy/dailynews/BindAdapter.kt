@@ -20,7 +20,6 @@ import java.util.*
 fun bindViewTitleImg(view: ImageView, url: String?) {
     val requestOptions = RequestOptions().apply {
         placeholder(R.mipmap.image_news)
-        centerCrop()
     }
     if (url.isNullOrEmpty()) {
         Glide.with(view.context)
@@ -43,7 +42,7 @@ fun bindViewBannerImg(view: ImageView, url: String?) {
     val requestOptions = RequestOptions().apply {
         isMemoryCacheable
         placeholder(R.mipmap.image_news)
-        centerCrop()
+//        centerCrop()
     }
     if (url.isNullOrEmpty()) {
         Glide.with(view.context)

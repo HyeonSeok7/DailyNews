@@ -6,13 +6,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.hy.dailynews.databinding.ItemBannerViewBinding
 import com.hy.dailynews.models.News
-import com.hy.dailynews.models.Newss
 import com.smarteist.autoimageslider.SliderViewAdapter
 
 class HomeBestNewsSliderAdapter(private val context: Context) :
     SliderViewAdapter<HomeBestNewsSliderAdapter.SliderAdapterVH>() {
 
-    private val items: ArrayList<Newss> = ArrayList()
+    private val items: ArrayList<News> = ArrayList()
 
     override fun getCount(): Int = items.size
 
@@ -26,14 +25,14 @@ class HomeBestNewsSliderAdapter(private val context: Context) :
         viewHolder?.bind(item)
     }
 
-    fun addItem(newItem: Newss?) {
+    fun addItem(newItem: News?) {
         newItem?.let {
             items.add(it)
             notifyDataSetChanged()
         }
     }
 
-    fun addItems(newItems: List<Newss>?) {
+    fun addItems(newItems: List<News>?) {
         Log.v(TAG, "newItems:$newItems")
         newItems?.let {
             items.addAll(it)
@@ -48,7 +47,7 @@ class HomeBestNewsSliderAdapter(private val context: Context) :
 
     inner class SliderAdapterVH(private val binding: ItemBannerViewBinding) :
         SliderViewAdapter.ViewHolder(binding.root) {
-        fun bind(data: Newss) {
+        fun bind(data: News) {
             binding.apply {
                 this.data = data
             }

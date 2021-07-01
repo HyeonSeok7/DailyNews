@@ -1,58 +1,44 @@
-package com.hy.dailynews.feature.main.home
+package com.hy.dailynews.feature.main.home.repositories
 
 import android.util.Log
+import com.hy.dailynews.feature.main.home.viewModels.HomeNewsListViewModel1
 import com.hy.dailynews.models.News
 import com.hy.dailynews.utils.Constants
-import com.hy.dailynews.utils.DataSource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import org.jsoup.Jsoup
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.StringReader
-import kotlin.system.measureTimeMillis
 
-class RemoteNewsData : DataSource {
+class HomeRepository1 {
 
-    override fun getAllNews(): Flow<News> = flow {
-        val time = measureTimeMillis {
-            val newsUrls = getUrlFromRss(Constants.GoogleRSS.BASE_URL)
-            Log.v(TAG,"getAllNews newsUrls:$newsUrls")
-            val newsAsync = mutableListOf<Deferred<News?>>()
+    private lateinit var homeNewsListViewModel: HomeNewsListViewModel1
 
-            for (newsUrl in newsUrls) {
-                CoroutineScope(Dispatchers.IO).async { getNewsFromUrl(newsUrl) }
-                    .also { newsAsync.add(it) }
-            }
-            newsAsync.forEach { it ->
-                it.await()?.let { emit(it) }
-            }
+    fun getBannerAllNews(): MutableList<News> {
+        val newsUrls = getUrlFromRss(Constants.GoogleRSS.BASE_URL)
+        Log.v(TAG,"getBannerAllNews newsUrls:$newsUrls")
+        val bannerNewsList = mutableListOf<News>()
+        for (newsUrl in newsUrls) {
+            getNewsFromUrl(newsUrl)?.let { bannerNewsList.add(it) }
         }
-        Log.d(TAG, "걸린 시간: $time ms")
-    }.flowOn(Dispatchers.IO)
+        Log.e(TAG,"bannerNewsList:$bannerNewsList")
+        return bannerNewsList
+    }
 
-    override fun getBestAllNews(): Flow<News> = flow {
-        val time = measureTimeMillis {
-            val newsUrls = getUrlFromRss(Constants.GoogleRSS.HOT_URL)
-            val newsAsync = mutableListOf<Deferred<News?>>()
+    fun getBannerNews1(viewModel: HomeNewsListViewModel1) {
+        homeNewsListViewModel = viewModel
+        val newsUrls = getUrlFromRss(Constants.GoogleRSS.BASE_URL)
+        for (newsUrl in newsUrls) {
+            getNewsFromUrl(newsUrl)?.let { data -> homeNewsListViewModel.bannerNewsListItem.postValue(data) }
+        }
+    }
 
-            for (newsUrl in newsUrls) {
-                CoroutineScope(Dispatchers.IO).async { getNewsFromUrl(newsUrl) }
-                    .also { newsAsync.add(it) }
-            }
-
-                newsAsync.forEach { it ->
-                    it.await()?.let { emit(it) }
-                }
-            }
-
-        Log.d(TAG, "걸린 시간 best: $time ms")
-    }.flowOn(Dispatchers.IO)
+    fun getAllNews(viewModel: HomeNewsListViewModel1) {
+        homeNewsListViewModel = viewModel
+        val newsUrls = getUrlFromRss(Constants.GoogleRSS.HOT_URL)
+        for (newsUrl in newsUrls) {
+            getNewsFromUrl(newsUrl)?.let { data -> homeNewsListViewModel.newsListItem.postValue(data) }
+        }
+    }
 
     // rss 페이지에서 기사 url 추출
     private fun getUrlFromRss(rssUrl: String): MutableList<String> {
@@ -91,7 +77,7 @@ class RemoteNewsData : DataSource {
         try {
             val doc by lazy {
                 Jsoup.connect(newsUrl)
-                    .timeout(1500)
+//                    .timeout(1500)
                     .get()
                     .head()
             }
@@ -110,7 +96,7 @@ class RemoteNewsData : DataSource {
                 siteName,
                 description,
 
-            )
+                )
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -119,11 +105,7 @@ class RemoteNewsData : DataSource {
     }
 
     companion object {
-
-        private val TAG = RemoteNewsData::class.java.simpleName
-        private var instance: RemoteNewsData? = null
-//        fun getInstance() = instance ?: synchronized(this) {
-//                instance ?: RemoteNewsData().also { instance = it }
-//            }
+        private val TAG = HomeRepository1::class.java.simpleName
     }
+
 }

@@ -1,112 +1,100 @@
-//package com.hy.dailynews.feature.main.home
-//
-//import android.content.Context
-//import android.content.Intent
-//import android.os.Bundle
-//import androidx.fragment.app.Fragment
-//import android.view.LayoutInflater
-//import android.view.View
-//import android.view.ViewGroup
-//import androidx.core.os.bundleOf
-//import androidx.lifecycle.ViewModelProvider
-//import androidx.recyclerview.widget.LinearLayoutManager
-//import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-//import com.hy.dailynews.databinding.FragmentHome1Binding
-//import com.hy.dailynews.feature.NewsDetailActivity
-//import com.hy.dailynews.feature.main.NewsListAdapter
-//import com.hy.dailynews.feature.main.home.repositories.HomeRepository
-//import com.hy.dailynews.feature.main.home.viewModels.HomeNewsListViewModel
-//import com.hy.dailynews.feature.main.home.viewModels.HomeNewsListViewModelFactory
-//import com.hy.dailynews.models.News
-//import com.hy.dailynews.utils.Constants
-//
-//
-//class HomeFragment1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
-//
-//    private lateinit var binding: FragmentHome1Binding
-//    private lateinit var mAdapter: NewsListAdapter
-//    private lateinit var mContext: Context
-//    private lateinit var homeViewModel: HomeNewsListViewModel
-//
-//
-//    override fun onAttach(context: Context) {
-//        super.onAttach(context)
-//        mContext = context
-//    }
-//
-//    override fun onRefresh() {
-//        mAdapter.clear()
-////        homeViewModel.updateBestNewsData()
-//        homeViewModel.updateNewsData()
-//        homeViewModel.updateBestNewsData()
-//    }
-//
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View {
-//        binding = FragmentHome1Binding.inflate(inflater).apply {
-//            val homeListViewModelFactory = HomeNewsListViewModelFactory(HomeRepository(RemoteNewsData()))
-//            homeViewModel = ViewModelProvider(requireActivity(), homeListViewModelFactory).get(
-//                HomeNewsListViewModel::class.java)
-//        }
-//
-//        binding.layoutRefresh.setOnRefreshListener(this)
-//        initRVLayout()
-//        setUpData()
-//        return binding.root
-//    }
-//
-//    private fun initRVLayout() {
-//        mAdapter = NewsListAdapter()
-//            .apply {
-//                setHasStableIds(true)
-//                onClick = this@HomeFragment1::startDetailNewsActivity
-//            }
-//
-//        binding.rvNewsList.apply {
-//            this.adapter = mAdapter
-//            layoutManager = LinearLayoutManager(context)
-//        }
-//    }
-//
-//    private fun setUpData() {
-//        val bannerData = News().apply { itemType = Constants.ViewType.BANNER_TYPE }
-//        val titleData = News().apply { itemType = Constants.ViewType.TITLE_TYPE }
-//        val newListData = News().apply { itemType = Constants.ViewType.NEWS_LIST_TYPE }
-//        mAdapter.addItems(listOf(bannerData, titleData, newListData))
-//
-//        // 뉴스 세팅
-//        homeViewModel.newsList.observe(viewLifecycleOwner, { data ->
-//            // viewType 또한 reset 해줘야함
-//            mAdapter.clear()
-//            mAdapter.addItems(data)
-//        })
-//
-//        homeViewModel.bestNewsList.observe(viewLifecycleOwner, { data ->
-//            // viewType 또한 reset 해줘야함
-//            mAdapter.clear()
-//            mAdapter.addItems(data)
-//            mAdapter.addBestItems(data)
+package com.hy.dailynews.feature.main.home
+
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.hy.dailynews.databinding.FragmentHome1Binding
+import com.hy.dailynews.feature.main.home.adapter.HomeNewsListAdapter
+import com.hy.dailynews.feature.main.home.repositories.HomeRepository1
+import com.hy.dailynews.feature.main.home.viewModels.HomeNewsListViewModel1
+import com.hy.dailynews.feature.main.home.viewModels.HomeNewsListViewModelFactory1
+import com.hy.dailynews.models.HomeModel
+import com.hy.dailynews.models.News
+import com.hy.dailynews.utils.Constants
+
+class HomeFragment1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+
+    private lateinit var binding: FragmentHome1Binding
+    private lateinit var mAdapter: HomeNewsListAdapter
+    private lateinit var homeNewsListViewModel: HomeNewsListViewModel1
+
+    override fun onRefresh() {
+        mAdapter.bannerClear()
+        mAdapter.listClear()
+        initRVLayout()
+        homeNewsListViewModel.updateBannerNewsData()
+//        homeNewsListViewModel.updateBannerNewsData1()
+        homeNewsListViewModel.updateNewsData()
+        binding.layoutRefresh.isRefreshing = false
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentHome1Binding.inflate(inflater).apply {
+            val homeListModelFactory = HomeNewsListViewModelFactory1(HomeRepository1())
+            homeNewsListViewModel = ViewModelProvider(requireActivity(), homeListModelFactory).get(
+                HomeNewsListViewModel1::class.java
+            )
+        }
+        binding.layoutRefresh.setOnRefreshListener(this)
+        initRVLayout()
+        initData()
+        homeNewsListViewModel.updateBannerNewsData()
+//        homeNewsListViewModel.updateBannerNewsData1()
+        homeNewsListViewModel.updateNewsData()
+        return binding.root
+    }
+
+    private fun initRVLayout() {
+        mAdapter = HomeNewsListAdapter().apply {
+            setHasStableIds(true)
+        }
+        binding.rvNewsList.apply {
+            this.adapter = mAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
+        mAdapter.addModel(HomeModel(Constants.ViewType.BANNER_TYPE, null))
+    }
+
+    private fun initData() {
+
+        homeNewsListViewModel.bannerNewsList.observe(viewLifecycleOwner, { data ->
+            Log.v(TAG, "bannerList:$data")
+            mAdapter.bannerClear()
+            data.forEach { banner ->
+                mAdapter.bannerModel(HomeModel(Constants.ViewType.BANNER_TYPE, banner))
+            }
+        })
+
+//        homeNewsListViewModel.newsListItem.observe(viewLifecycleOwner, { data ->
+//            mAdapter.bannerClear()
+//            mAdapter.bannerModel(HomeModel(Constants.ViewType.BANNER_TYPE, data))
 //
 //        })
-//    }
-//
-//    private fun startDetailNewsActivity(news: News) {
-//        startActivity(
-//            Intent(context, NewsDetailActivity::class.java)
-//            .apply {
-//                putExtra(Constants.ExtraKey.KEY_WEB_URL, news.url)
-//                putExtra(Constants.ExtraKey.KEY_SITE_NAME, news.siteName)
-//            })
-//    }
-//
-//
-//    companion object {
-//        private val TAG = HomeFragment1::class.java.simpleName
-//
-//        fun newInstance() = HomeFragment1().apply {
-//            arguments = bundleOf()
-//        }
-//    }
-//}
+
+        homeNewsListViewModel.newsListItem.observe(viewLifecycleOwner, { data ->
+            mAdapter.addModel(HomeModel(Constants.ViewType.NEWS_LIST_TYPE, data))
+        })
+
+//        homeNewsListViewModel.progress.observe(viewLifecycleOwner, { progress ->
+//            binding.layoutRefresh.isRefreshing = progress
+//        })
+    }
+
+    companion object {
+        private val TAG = HomeFragment1::class.java.simpleName
+
+        fun newInstance() = HomeFragment1().apply {
+            arguments = bundleOf()
+        }
+    }
+}

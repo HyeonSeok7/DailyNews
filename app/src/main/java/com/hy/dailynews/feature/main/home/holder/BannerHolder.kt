@@ -1,6 +1,5 @@
 package com.hy.dailynews.feature.main.home.holder
 
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.hy.dailynews.databinding.ItemBannerBinding
 import com.hy.dailynews.feature.main.home.adapter.HomeBestNewsSliderAdapter
@@ -23,7 +22,7 @@ class BannerHolder(var binding: ItemBannerBinding) : RecyclerView.ViewHolder(bin
                 setIndicatorAnimationDuration(600)
                 scrollTimeInSec = 3
                 startAutoCycle()
-                Log.e(TAG,"ItemSize:${it.size}")
+
                 mSliderAdapter.clear()
                 if (it.isNotEmpty()) {
                     val size = it.size
@@ -40,7 +39,6 @@ class BannerHolder(var binding: ItemBannerBinding) : RecyclerView.ViewHolder(bin
             }
         }
     }
-
 
     companion object {
         private val TAG = BannerHolder::class.java.simpleName
