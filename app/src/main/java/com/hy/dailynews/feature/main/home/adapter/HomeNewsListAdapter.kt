@@ -9,42 +9,47 @@ import com.hy.dailynews.databinding.ItemNewsBinding
 import com.hy.dailynews.feature.main.home.holder.BannerHolder
 import com.hy.dailynews.feature.main.home.holder.NewsListHolder
 import com.hy.dailynews.models.HomeModel
+import com.hy.dailynews.models.News
 import com.hy.dailynews.utils.Constants
 
 class HomeNewsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> () {
 
-    private val items = ArrayList<HomeModel>()
-    private val bannerItems = ArrayList<HomeModel>()
+    private val item = HomeModel()
 
-    fun addModel(model: HomeModel) {
-        items.add(model)
-        notifyDataSetChanged()
+    fun addModel(newsList: MutableList<News>) {
+        newsList.forEach {
+            item.newsList.add(it)
+        }
+        notifyItemChanged(item.newsList.size)
     }
 
-    fun bannerModel(model: HomeModel) {
-        bannerItems.add(model)
+    fun bannerModel(bannerList: MutableList<News>) {
+        bannerList.forEach {
+            item.bannerList.add(it)
+        }
+        notifyItemRangeChanged(0, 1)
+//        notifyItemChanged(item.bannerList.size)
     }
 
     fun bannerClear() {
-        bannerItems.clear()
-        notifyDataSetChanged()
+        item.bannerList.clear()
+        notifyItemRemoved(0)
+//        notifyDataSetChanged()
     }
 
     fun listClear() {
-        items.clear()
+        item.newsList.clear()
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = item.newsList.size.plus(1)
 
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }
 
     override fun getItemViewType(position: Int): Int {
-        items.let {
-            return it[position].viewType!!
-        }
+        return if (position == 0) Constants.ViewType.BANNER_TYPE else Constants.ViewType.NEWS_LIST_TYPE
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -66,8 +71,8 @@ class HomeNewsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> () {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is BannerHolder   -> holder.bind(bannerItems)
-            is NewsListHolder -> holder.bind(items[position])
+            is BannerHolder   -> holder.bind(item.bannerList)
+            is NewsListHolder -> holder.bind(item.newsList[position-1])
         }
     }
 

@@ -7,7 +7,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
         <com.smarteist.autoimageslider.SliderView
             android:id="@+id/slider_view"
             android:layout_width="match_parent"

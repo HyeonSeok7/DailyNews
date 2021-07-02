@@ -1,7 +1,6 @@
 package com.hy.dailynews.feature.main.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +14,7 @@ import com.hy.dailynews.feature.main.home.adapter.HomeNewsListAdapter
 import com.hy.dailynews.feature.main.home.repositories.HomeRepository
 import com.hy.dailynews.feature.main.home.viewModels.HomeNewsListViewModel
 import com.hy.dailynews.feature.main.home.viewModels.HomeNewsListViewModelFactory
-import com.hy.dailynews.models.HomeModel
-import com.hy.dailynews.utils.Constants
+import com.hy.dailynews.models.News
 
 class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
@@ -27,8 +25,9 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onRefresh() {
         mAdapter.bannerClear()
         mAdapter.listClear()
-        homeNewsListViewModel.updateBestNewsData()
+        homeNewsListViewModel.updateBannerNewsData()
         homeNewsListViewModel.updateNewsData()
+        binding.layoutRefresh.isRefreshing = false
     }
 
     override fun onCreateView(
@@ -36,23 +35,23 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater).apply {
-            val homeListViewModelFactory = HomeNewsListViewModelFactory(HomeRepository(RemoteNewsData()))
-            homeNewsListViewModel = ViewModelProvider(requireActivity(), homeListViewModelFactory).get(HomeNewsListViewModel::class.java)
+            val homeListModelFactory = HomeNewsListViewModelFactory(HomeRepository())
+            homeNewsListViewModel = ViewModelProvider(requireActivity(), homeListModelFactory).get(
+                HomeNewsListViewModel::class.java
+            )
         }
         binding.layoutRefresh.setOnRefreshListener(this)
         initRVLayout()
         initData()
-
+        homeNewsListViewModel.updateBannerNewsData()
+        homeNewsListViewModel.updateNewsData()
         return binding.root
     }
 
     private fun initRVLayout() {
-        Log.d(TAG, "initRVLayout")
-
         mAdapter = HomeNewsListAdapter().apply {
             setHasStableIds(true)
         }
-
         binding.rvNewsList.apply {
             this.adapter = mAdapter
             layoutManager = LinearLayoutManager(context)
@@ -60,28 +59,20 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun initData() {
-        Log.d(TAG, "initData")
 
-        // 뉴스 셋팅
-        homeNewsListViewModel.bestNewsList.observe(viewLifecycleOwner, { data ->
+        homeNewsListViewModel.bannerNewsList.observe(viewLifecycleOwner, { data: MutableList<News> ->
             mAdapter.bannerClear()
-            mAdapter.addModel(HomeModel(Constants.ViewType.BANNER_TYPE, null))
-            data.forEach { bannerItem ->
-                mAdapter.bannerModel(HomeModel(null, bannerItem))
-            }
-
+            mAdapter.bannerModel(data)
         })
 
-        homeNewsListViewModel.newsList.observe(viewLifecycleOwner, { data ->
+        homeNewsListViewModel.newsList.observe(viewLifecycleOwner, { data: MutableList<News> ->
             mAdapter.listClear()
-            data.forEach { listItem ->
-                mAdapter.addModel(HomeModel(Constants.ViewType.NEWS_LIST_TYPE, listItem))
-            }
+            mAdapter.addModel(data)
         })
 
-//        homeNewsListViewModel.progress.observe(viewLifecycleOwner, { bar ->
-//            binding.layoutRefresh.isRefreshing = bar
-//        })
+        homeNewsListViewModel.progress.observe(viewLifecycleOwner, { progress ->
+            binding.layoutRefresh.isRefreshing = progress
+        })
     }
 
     companion object {

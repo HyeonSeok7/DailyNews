@@ -26,10 +26,8 @@ class HomeBestNewsSliderAdapter(private val context: Context) :
     }
 
     fun addItem(newItem: News?) {
-        newItem?.let {
-            items.add(it)
-            notifyDataSetChanged()
-        }
+        newItem?.let { items.add(it) }
+        notifyDataSetChanged()
     }
 
     fun addItems(newItems: List<News>?) {
