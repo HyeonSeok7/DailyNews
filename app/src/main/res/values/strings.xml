@@ -10,6 +10,7 @@
     <!-- bottom navigation -->
     <string name="bottom_navigation_home">홈</string>
     <string name="bottom_navigation_search">검색</string>
+    <string name="bottom_navigation_headline">헤드라인</string>
     <string name="bottom_navigation_save">저장</string>
     <string name="bottom_navigation_setting">설정</string>
 

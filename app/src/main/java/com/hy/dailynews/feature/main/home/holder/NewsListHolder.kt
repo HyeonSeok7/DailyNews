@@ -11,16 +11,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class NewsListHolder (var binding: ItemNewsBinding) : RecyclerView.ViewHolder(binding.root) {
+class NewsListHolder(var binding: ItemNewsBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: News) {
-            binding.data = item
-            binding.layoutRoot.setOnClickListener { view ->
-                view.context.startActivity(Intent(view.context, NewsDetailActivity::class.java).apply {
-                    putExtra(Constants.ExtraKey.KEY_WEB_URL, item.url)
-                    putExtra(Constants.ExtraKey.KEY_SITE_NAME, item.siteName)
-                })
-            }
+        binding.data = item
+        binding.layoutRoot.setOnClickListener { view ->
+            view.context.startActivity(Intent(view.context, NewsDetailActivity::class.java).apply {
+                putExtra(Constants.ExtraKey.KEY_WEB_URL, item.url)
+                putExtra(Constants.ExtraKey.KEY_SITE_NAME, item.siteName)
+            })
+        }
     }
 
     companion object {
