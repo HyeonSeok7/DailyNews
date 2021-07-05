@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragHome">
+
+    <keep_state_fragment
+        android:id="@+id/fragHome"
+        android:name="com.hy.dailynews.feature.main.home.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home" />
+
+    <keep_state_fragment
+        android:id="@+id/fragHeadLine"
+        android:name="com.hy.dailynews.feature.main.headline.HeadlineFragment"
+        android:label="HeadlineFragment"
+        tools:layout="@layout/fragment_headline" />
+
+    <keep_state_fragment
+        android:id="@+id/fragSave"
+        android:name="com.hy.dailynews.feature.main.save.SaveFragment"
+        android:label="SaveFragment"
+        tools:layout="@layout/fragment_headline" />
+
+    <keep_state_fragment
+        android:id="@+id/fragSettings"
+        android:name="com.hy.dailynews.feature.main.settings.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings" />
+
+</navigation>

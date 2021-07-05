@@ -2,28 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/item_home"
+        android:id="@+id/fragHome"
         android:icon="@drawable/ic_home"
         android:enabled="true"
         android:contentDescription="@string/bottom_navigation_home"
         android:title="@string/bottom_navigation_home" />
 
     <item
-        android:id="@+id/item_search"
+        android:id="@+id/fragHeadLine"
         android:icon="@drawable/ic_headline"
         android:enabled="true"
-        android:contentDescription="@string/bottom_navigation_search"
+        android:contentDescription="@string/bottom_navigation_headline"
         android:title="@string/bottom_navigation_headline"/>
 
     <item
-        android:id="@+id/item_bookmark"
+        android:id="@+id/fragSave"
         android:icon="@drawable/ic_save_off"
         android:enabled="true"
         android:contentDescription="@string/bottom_navigation_save"
         android:title="@string/bottom_navigation_save"/>
 
     <item
-        android:id="@+id/item_setting"
+        android:id="@+id/fragSettings"
         android:icon="@drawable/ic_settings"
         android:enabled="true"
         android:contentDescription="@string/bottom_navigation_setting"

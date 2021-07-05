@@ -39,6 +39,12 @@ class HomeNewsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> () {
 
     fun listClear() {
         item.newsList.clear()
+        notifyItemRangeRemoved(1, item.newsList.size)
+    }
+
+    fun clear() {
+        item.bannerList.clear()
+        item.newsList.clear()
         notifyDataSetChanged()
     }
 

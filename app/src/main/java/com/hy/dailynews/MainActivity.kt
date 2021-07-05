@@ -4,12 +4,21 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Bundle
+import android.view.MenuItem
+import android.widget.Toolbar
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.hy.dailynews.databinding.ActivityMainBinding
 //import com.hy.dailynews.feature.main.home.HomeFragment
 import com.hy.dailynews.feature.main.home.HomeFragment
+import com.hy.dailynews.utils.KeepStateNavigator
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.toast
@@ -17,15 +26,15 @@ import org.jetbrains.anko.yesButton
 
 class MainActivity : AppCompatActivity() {
 
-    private var fragment: Fragment? = null
     private lateinit var binding: ActivityMainBinding
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        initView(savedInstanceState)
+//        setContentView(R.layout.activity_main)
+//        initView(savedInstanceState)
+        initBinding()
+        setActionBar()
+        initNavigation()
     }
 
     override fun onBackPressed() {
@@ -35,31 +44,44 @@ class MainActivity : AppCompatActivity() {
         }.show()
     }
 
+    private fun setActionBar() {
+        binding.toolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.ic_search)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun initBinding() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.lifecycleOwner = this
+    }
+
     private fun isOnline(): Boolean {
         val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo: NetworkInfo? = connMgr.activeNetworkInfo
         return networkInfo?.isConnected == true
     }
 
-    private fun initView(savedInstanceState: Bundle?) {
-        val fm: FragmentManager = supportFragmentManager
+    private fun initNavigation() {
         if (isOnline()) {
-//            binding.network = isOnline()
-            if (savedInstanceState == null) {
-                fragment = HomeFragment.newInstance()
-                val transaction = fm.beginTransaction()
-                transaction.apply {
-                    replace(R.id.layout_frame, fragment as HomeFragment)
-                    commit()
-                }
-            } else {
-                fragment = fm.findFragmentById(R.id.layout_frame)
-            }
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.layout_frame) as NavHostFragment
+            val navController = navHostFragment.navController
+//            val appBarConfiguration = AppBarConfiguration(
+//                topLevelDestinationIds = setOf(),
+//                fallbackOnNavigateUpListener = ::onSupportNavigateUp
+//            )
+
+            val navigator = KeepStateNavigator(this, navHostFragment.childFragmentManager, R.id.layout_frame)
+            navController.navigatorProvider.addNavigator(navigator)
+            navController.setGraph(R.navigation.nav_graph)
+            binding.layoutBottomNavigation.setupWithNavController(navController)
+//            binding.toolbar.setupWithNavController(navController, appBarConfiguration)
         } else {
             /** '다시 시도' 버튼 예정*/
             toast(R.string.content_no_network_connection)
-//            binding.network = isOnline()
         }
+
     }
 
     companion object {

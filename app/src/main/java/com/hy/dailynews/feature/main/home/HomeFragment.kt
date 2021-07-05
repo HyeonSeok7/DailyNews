@@ -23,8 +23,9 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var homeNewsListViewModel: HomeNewsListViewModel
 
     override fun onRefresh() {
-        mAdapter.bannerClear()
-        mAdapter.listClear()
+//        mAdapter.bannerClear()
+//        mAdapter.listClear()
+        mAdapter.clear()
         homeNewsListViewModel.updateBannerNewsData()
         homeNewsListViewModel.updateNewsData()
         binding.layoutRefresh.isRefreshing = false
@@ -61,12 +62,11 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun initData() {
 
         homeNewsListViewModel.bannerNewsList.observe(viewLifecycleOwner, { data: MutableList<News> ->
-            mAdapter.bannerClear()
             mAdapter.bannerModel(data)
         })
 
         homeNewsListViewModel.newsList.observe(viewLifecycleOwner, { data: MutableList<News> ->
-            mAdapter.listClear()
+            mAdapter.clear()
             mAdapter.addModel(data)
         })
 
