@@ -1,23 +1,17 @@
 package com.hy.dailynews
 
+//import com.hy.dailynews.feature.main.home.HomeFragment
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Toolbar
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.hy.dailynews.databinding.ActivityMainBinding
-//import com.hy.dailynews.feature.main.home.HomeFragment
-import com.hy.dailynews.feature.main.home.HomeFragment
 import com.hy.dailynews.utils.KeepStateNavigator
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
